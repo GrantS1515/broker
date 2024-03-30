@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { WebSocket } from "ws";
 import { MaybeType } from "maybe/src/maybe.js"
-import { newBroker, Broker, BrokerMemory, closeBroker, newSingleEvent,
-	IndexedEvent, SingleEvent, newMultipleEventRequest, 
-	isMultipleEventsResponse
-} from "./broker.js"
+import { newBroker, Broker, BrokerMemory, closeBroker } from "./broker.js"
+import { newSingleEvent, IndexedEvent, SingleEvent, 
+newMultipleEventRequest, isMultipleEventsResponse
+} from "broker-types/broker-types.js"
 
 describe("testing memory persistence for memory", () => {
 	it("can append and then get all the events...", () => {

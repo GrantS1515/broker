@@ -1,55 +1,9 @@
 import WebSocket, { WebSocketServer } from "ws";
 import { Maybe } from "maybe/src/maybe.js";
 import { Subject, map, filter } from "rxjs"
-
-enum BrokerEventClass {
-	single = "broker__event__single",
-	getMultipleRequest = "broker__event__getMultipleRequest",
-	getMultipleResponse = "broker__event__getMultipleResponse",
-}
-
-export type SingleEvent = {
-	eventClass: BrokerEventClass
-	event: object,
-}
-
-export function newSingleEvent(event: object): SingleEvent {
-	return { eventClass: BrokerEventClass.single, event: event }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isSingleEvent(testObj: any): testObj is SingleEvent {
-	return (testObj.eventClass === BrokerEventClass.single)
-		&& (testObj.event !== undefined)
-}
-
-type MultipleEventsRequest = {
-	eventClass: BrokerEventClass
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isMultipleEventsRequest(testObj: any): testObj is MultipleEventsRequest {
-	return (testObj.eventClass === BrokerEventClass.getMultipleRequest)
-}
-
-export type MultipleEventsResponse = {
-	eventClass: BrokerEventClass,
-	events: IndexedEvent[],
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isMultipleEventsResponse(testObj: any): testObj is MultipleEventsResponse {
-	return (testObj.eventClass === BrokerEventClass.getMultipleResponse) 
-		&& (testObj.events !== undefined)
-}
-
-function newMultipleEventsResponse(events: IndexedEvent[]): MultipleEventsResponse {
-	return { eventClass: BrokerEventClass.getMultipleResponse, events: events }
-}
-
-export function newMultipleEventRequest(): MultipleEventsRequest {
-	return { eventClass: BrokerEventClass.getMultipleRequest }
-}
+import { newMultipleEventsResponse, IndexedEvent, 
+	isSingleEvent, isMultipleEventsRequest  
+} from "broker-types/broker-types.js"
 
 export type Broker = {
 	wss: WebSocketServer,
@@ -155,11 +109,6 @@ export async function closeBroker(broker: Broker): Promise<void> {
 	})
 
 	return (myPromise)
-}
-
-export type IndexedEvent = {
-	index: number,
-	event: object,
 }
 
 interface BrokerPersistance {
