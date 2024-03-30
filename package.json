@@ -1,0 +1,34 @@
+{
+  "name": "broker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tscomp": "npx tsc-watch",
+    "tslint": "npx esw -w src/**/*.ts",
+    "tstest": "node_modules/mocha/bin/mocha.js -w --parallel src/**/*.spec.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "events": "^3.3.0",
+    "rxjs": "^7.8.1",
+    "ws": "^8.16.0",
+    "maybe": "github:GrantS1515/maybe"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.12",
+    "@types/events": "^3.0.3",
+    "@types/mocha": "^10.0.6",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "chai": "^5.1.0",
+    "eslint": "^8.57.0",
+    "eslint-watch": "^8.0.0",
+    "mocha": "^10.3.0",
+    "tsc-watch": "^6.0.4",
+    "tsx": "^4.7.1"
+  }
+}
