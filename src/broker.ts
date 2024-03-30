@@ -1,5 +1,5 @@
 import WebSocket, { WebSocketServer } from "ws";
-import { MaybeType, Maybe } from "maybe/src/maybe.js";
+import { Maybe } from "maybe/src/maybe.js";
 import { Subject, map, filter } from "rxjs"
 
 enum BrokerEventClass {
@@ -17,6 +17,7 @@ export function newSingleEvent(event: object): SingleEvent {
 	return { eventClass: BrokerEventClass.single, event: event }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isSingleEvent(testObj: any): testObj is SingleEvent {
 	return (testObj.eventClass === BrokerEventClass.single)
 		&& (testObj.event !== undefined)
@@ -26,21 +27,23 @@ type MultipleEventsRequest = {
 	eventClass: BrokerEventClass
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isMultipleEventsRequest(testObj: any): testObj is MultipleEventsRequest {
 	return (testObj.eventClass === BrokerEventClass.getMultipleRequest)
 }
 
 export type MultipleEventsResponse = {
 	eventClass: BrokerEventClass,
-	events: IndexedBrokerEvent[],
+	events: IndexedEvent[],
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isMultipleEventsResponse(testObj: any): testObj is MultipleEventsResponse {
 	return (testObj.eventClass === BrokerEventClass.getMultipleResponse) 
 		&& (testObj.events !== undefined)
 }
 
-function newMultipleEventsResponse(events: IndexedBrokerEvent[]): MultipleEventsResponse {
+function newMultipleEventsResponse(events: IndexedEvent[]): MultipleEventsResponse {
 	return { eventClass: BrokerEventClass.getMultipleResponse, events: events }
 }
 
@@ -131,47 +134,16 @@ export async function newBroker(port: number, persistence: BrokerPersistance): P
 	
 }
 
-// export async function newBroker(port: number): Promise<Maybe<Broker>> {
-// 	// const myPort = port;
-// 	// const myPersistence = persistence;
-
-// 	const myPromise: Promise<Maybe<Broker>> = new Promise(res => {
-// 		try {
-// 			const wss = new WebSocketServer({ port: port });
-// 			wss.on("connection", (ws: WebSocket) => {
-				
-// 				ws.on("message", (message: string) => {
-
-// 					// convert the string to broker object
-// 					// determine whether a single or multiple event
-
-// 					wss.clients.forEach((client: WebSocket) => {
-// 						if (client.readyState == WebSocket.OPEN) {
-// 							client.send(message)
-// 						}
-// 					})
-// 				});
-// 			})
-// 			res(Maybe({ wss: wss }))
-// 		} catch {
-// 			res(Maybe<Broker>(undefined))
-// 		}
-// 	})
-
-// 	return (await myPromise)
-	
-// }
-
-function closeWSPromise(ws: WebSocket): Promise<void> {
-	return new Promise(res => {
-			ws.on("close", () => {
-				res();
-			})
-			ws.close()
-	})
-}
-
 export async function closeBroker(broker: Broker): Promise<void> {
+
+	function closeWSPromise(ws: WebSocket): Promise<void> {
+		return new Promise(res => {
+				ws.on("close", () => {
+					res();
+				})
+				ws.close()
+		})
+	}
 
 	const wsClosePromises: Promise<void>[] = [...broker.wss.clients]
 		.map((ws: WebSocket) => closeWSPromise(ws))
@@ -185,18 +157,18 @@ export async function closeBroker(broker: Broker): Promise<void> {
 	return (myPromise)
 }
 
-export type IndexedBrokerEvent = {
+export type IndexedEvent = {
 	index: number,
-	event: any,
+	event: object,
 }
 
 interface BrokerPersistance {
 	append(event: object): void,
-	getAll(): IndexedBrokerEvent[],
+	getAll(): IndexedEvent[],
 }
 
 export class BrokerMemory implements BrokerPersistance {
-	private list: IndexedBrokerEvent[];
+	private list: IndexedEvent[];
 	private currentIndex: number;
 
 	constructor() {
@@ -210,48 +182,7 @@ export class BrokerMemory implements BrokerPersistance {
 		this.currentIndex += 1;
 	}
 
-	getAll(): IndexedBrokerEvent[] {
+	getAll(): IndexedEvent[] {
 		return this.list
 	}
 }
-
-// interface BrokerInterface {
-// 	newBroker(port: number): Promise<Maybe<Broker>>;
-// 	// send(broker:Broker, event: Event): void;
-// };
-
-// export class MemoryBroker implements BrokerInterface {
-
-// 	async newBroker(port: number): Promise<Maybe<Broker>> {
-// 		try {
-// 			const wss = new WebSocketServer({ port: port });
-
-// 			wss.on("connection", (ws: WebSocket) => {
-				
-// 				ws.on("message", (message: string) => {
-
-// 					// convert the string to broker object
-// 					// determine whether a single or multiple event
-
-// 					wss.clients.forEach((client: WebSocket) => {
-// 						if (client.readyState == WebSocket.OPEN) {
-// 							client.send(message)
-// 						}
-// 					})
-// 				});
-// 			})
-
-// 			const myPromise: Promise<Maybe<Broker>> = new Promise((res) => {
-// 				wss.on("listening", () => {
-// 					res(Maybe({wss: wss}));
-// 				})
-// 			});
-// 			return (myPromise)
-			
-// 		} catch {
-// 			return Promise.resolve(Maybe<Broker>(undefined))
-// 		}
-		
-		
-// 	}
-// }
