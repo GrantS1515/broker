@@ -12,15 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "broker-types": "github:GrantS1515/broker-types",
-    "events": "^3.3.0",
     "maybe": "github:GrantS1515/maybe",
     "rxjs": "^7.8.1",
     "ws": "^8.16.0"
   },
   "devDependencies": {
+    "broker-types": "github:GrantS1515/broker-types",
     "@types/chai": "^4.3.12",
-    "@types/events": "^3.0.3",
     "@types/mocha": "^10.0.6",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

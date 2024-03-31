@@ -77,8 +77,12 @@ export async function newBroker(port: number, persistence: BrokerPersistance): P
 					sendToClient(be.ws, JSON.stringify(be.message));
 			})
 
+			wss.on("listening", () => {
+				res(Maybe({ wss: wss }))	
+			})
+
 			
-			res(Maybe({ wss: wss }))
+			
 		} catch {
 			res(Maybe<Broker>(undefined))
 		}
