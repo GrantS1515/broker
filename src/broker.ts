@@ -1,9 +1,9 @@
 import WebSocket, { WebSocketServer } from "ws";
-import { Maybe } from "maybe/src/maybe.js";
+import { Maybe } from "maybe";
 import { Subject, map, filter } from "rxjs"
 import { newMultipleEventsResponse, IndexedEvent, 
 	isSingleEvent, isMultipleEventsRequest  
-} from "broker-types/broker-types.js"
+} from "broker-types"
 
 export type Broker = {
 	wss: WebSocketServer,

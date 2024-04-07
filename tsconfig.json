@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2022",
+        "module": "ES2022",
         "outDir": "./dist",
         "rootDir": "./src",
         "declaration": true,
@@ -9,7 +10,8 @@
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "noUncheckedIndexedAccess": true,
-        "module": "Node16",
+        "allowSyntheticDefaultImports": true, 
+        "moduleResolution": "node",
     },
     "exclude": [
         "./node_modules",

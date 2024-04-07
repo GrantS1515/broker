@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "tscomp": "npx tsc-watch",
     "tslint": "npx esw -w src/**/*.ts",
-    "tstest": "node_modules/mocha/bin/mocha.js -w --parallel src/**/*.spec.ts"
+    "test": "node_modules/mocha/bin/mocha.js -w --parallel dist/**/*.spec.js"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,6 @@
     "eslint": "^8.57.0",
     "eslint-watch": "^8.0.0",
     "mocha": "^10.3.0",
-    "tsc-watch": "^6.0.4",
-    "tsx": "^4.7.1"
+    "tsc-watch": "^6.0.4"
   }
 }
